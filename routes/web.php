@@ -14,6 +14,4 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return view('layout.dashboard');
-});
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'root']);
