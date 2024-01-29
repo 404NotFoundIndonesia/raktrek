@@ -80,4 +80,10 @@
     .login-card p.register-label a {
         color: black;
     }
+
+    @media(max-width: 480px) {
+        .login-card {
+            box-shadow: none;
+        }
+    }
 </style>

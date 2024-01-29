@@ -20,4 +20,5 @@ Route::post('logout', [\App\Http\Controllers\AuthController::class, 'signOut'])-
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'root']);
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'home'])->name('home');
+Route::get('/explore', [\App\Http\Controllers\HomeController::class, 'explore'])->name('explore');

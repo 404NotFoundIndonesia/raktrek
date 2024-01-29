@@ -94,4 +94,10 @@
     .register-card p.register-label a {
         color: black;
     }
+
+    @media(max-width: 480px) {
+        .register-card {
+            box-shadow: none;
+        }
+    }
 </style>

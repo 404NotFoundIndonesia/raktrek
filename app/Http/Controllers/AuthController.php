@@ -13,7 +13,7 @@ use Inertia\Response;
 
 class AuthController extends Controller
 {
-    public function login(): Response {
+    public function login(): Response|RedirectResponse {
         if (!auth()->guest()) {
             return redirect('/');
         }
@@ -49,7 +49,7 @@ class AuthController extends Controller
 
     public function signOut(): RedirectResponse {
         Auth::logout();
-        
+
         return redirect('/');
     }
 
