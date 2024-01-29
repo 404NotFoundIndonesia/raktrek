@@ -56,7 +56,7 @@
             <div class="form-error">{errorMessage}</div>
             {/if}
 
-            <p class='register-label'>Already have an account? <a href="/register">Login here</a></p>
+            <p class='register-label'>Already have an account? <a href="/login">Login here</a></p>
         </div>
     </main>
 </Layout>
