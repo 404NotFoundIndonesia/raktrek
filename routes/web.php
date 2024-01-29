@@ -1,17 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Auth Route
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
+*/
+
+Route::get('login', [\App\Http\Controllers\AuthController::class, 'login'])->name('auth.login');
+Route::post('login', [\App\Http\Controllers\AuthController::class, 'signIn'])->name('auth.signIn');
+Route::get('register', [\App\Http\Controllers\AuthController::class, 'register'])->name('auth.register');
+Route::post('register', [\App\Http\Controllers\AuthController::class, 'signUp'])->name('auth.signUp');
+Route::post('logout', [\App\Http\Controllers\AuthController::class, 'signOut'])->name('auth.signOut');
+
+/*
+|--------------------------------------------------------------------------
+| Main Route
+|--------------------------------------------------------------------------
 */
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'root']);
