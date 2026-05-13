@@ -41,6 +41,35 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
+/*
+|--------------------------------------------------------------------------
+| Borrowing Routes (member)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth')->group(function () {
+    Route::post('/borrowings', [\App\Http\Controllers\BorrowingController::class, 'store'])->name('borrowings.store');
+    Route::patch('/borrowings/{borrowing}/return', [\App\Http\Controllers\BorrowingController::class, 'processReturn'])->name('borrowings.return');
+    Route::patch('/borrowings/{borrowing}/renew', [\App\Http\Controllers\BorrowingController::class, 'renew'])->name('borrowings.renew');
+    Route::get('/my/borrowings', [\App\Http\Controllers\BorrowingController::class, 'myBorrowings'])->name('my.borrowings');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:staff'])->prefix('admin')->name('admin.')->group(function () {
+    Route::patch('/borrowings/{borrowing}/return', [\App\Http\Controllers\Admin\AdminBorrowingController::class, 'processReturn'])->name('borrowings.return');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Main Route
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'home'])->name('home');
 Route::get('/explore', [\App\Http\Controllers\BookController::class, 'index'])->name('explore');
 Route::get('/books', [\App\Http\Controllers\BookController::class, 'index'])->name('books.index');

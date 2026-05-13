@@ -93,25 +93,25 @@ Legend: ✅ = Done, 🔲 = Pending
 
 *Depends on: Phase 4 complete*
 
-- [ ] **Borrow a book** — `POST /borrowings` creates a `borrowing` record with `due_date = today + 14 days`; sets `book.availability = false`
+- [x] **Borrow a book** — `POST /borrowings` creates a `borrowing` record with `due_date = today + 14 days`; sets `book.availability = false`
   - DoD: Only available books can be borrowed; a user cannot borrow the same book twice while it is still checked out; success returns to book detail with updated badge.
-  - [ ] **Test (Feature):** `tests/Feature/Borrowing/BorrowTest.php` — assert `POST /borrowings` creates record with correct `due_date`; assert `book.availability` set to false; assert borrowing unavailable book returns 422; assert borrowing already-checked-out book returns 422; assert guest is redirected to login.
+  - [x] **Test (Feature):** `tests/Feature/Borrowing/BorrowTest.php` — assert `POST /borrowings` creates record with correct `due_date`; assert `book.availability` set to false; assert borrowing unavailable book returns 422; assert borrowing already-checked-out book returns 422; assert guest is redirected to login.
 
-- [ ] **Return a book** — `PATCH /borrowings/{id}/return` sets `return_date = today`; sets `book.availability = true`; triggers waitlist notification if queue exists
+- [x] **Return a book** — `PATCH /borrowings/{id}/return` sets `return_date = today`; sets `book.availability = true`; triggers waitlist notification if queue exists
   - DoD: `return_date` saved; availability updated; member's "My Borrowings" list reflects returned status.
-  - [ ] **Test (Feature):** `tests/Feature/Borrowing/ReturnTest.php` — assert `PATCH /borrowings/{id}/return` sets `return_date` to today; assert `book.availability` set to true; assert non-owner returns 403; assert already-returned borrowing returns 422; assert notification dispatched when waitlist exists (use `Notification::fake()`).
+  - [x] **Test (Feature):** `tests/Feature/Borrowing/ReturnTest.php` — assert `PATCH /borrowings/{id}/return` sets `return_date` to today; assert `book.availability` set to true; assert non-owner returns 403; assert already-returned borrowing returns 422; assert notification dispatched when waitlist exists (use `Notification::fake()`).
 
-- [ ] **Renew a book** — `PATCH /borrowings/{id}/renew` extends `due_date` by 14 days; blocked if book has a waitlist
+- [x] **Renew a book** — `PATCH /borrowings/{id}/renew` extends `due_date` by 14 days; blocked if book has a waitlist
   - DoD: Renewal succeeds with no waitlist; returns error with active waitlist; new `due_date` shown to user.
-  - [ ] **Test (Feature):** `tests/Feature/Borrowing/RenewTest.php` — assert `PATCH /borrowings/{id}/renew` extends `due_date` by 14 days when no waitlist; assert returns 422 with active waitlist; assert non-owner returns 403.
+  - [x] **Test (Feature):** `tests/Feature/Borrowing/RenewTest.php` — assert `PATCH /borrowings/{id}/renew` extends `due_date` by 14 days when no waitlist; assert returns 422 with active waitlist; assert non-owner returns 403.
 
-- [ ] **Member borrowing history** — `GET /my/borrowings` lists all borrowings (active and past) with due dates, return dates, overdue flag
+- [x] **Member borrowing history** — `GET /my/borrowings` lists all borrowings (active and past) with due dates, return dates, overdue flag
   - DoD: Active loans shown first; overdue loans (past `due_date`, no `return_date`) visually highlighted; page accessible to members only.
-  - [ ] **Test (Feature):** `tests/Feature/Borrowing/BorrowingHistoryTest.php` — assert `GET /my/borrowings` returns only the authenticated member's records; assert overdue loans include an `is_overdue` flag set to true; assert guest redirects to login.
+  - [x] **Test (Feature):** `tests/Feature/Borrowing/BorrowingHistoryTest.php` — assert `GET /my/borrowings` returns only the authenticated member's records; assert overdue loans include an `is_overdue` flag set to true; assert guest redirects to login.
 
-- [ ] **Staff: record return** — staff can process a return on behalf of any member via admin dashboard
+- [x] **Staff: record return** — staff can process a return on behalf of any member via admin dashboard
   - DoD: `PATCH /admin/borrowings/{id}/return` works for staff role; triggers same return logic as member self-return.
-  - [ ] **Test (Feature):** `tests/Feature/Admin/AdminReturnTest.php` — assert staff can return any member's borrowing; assert member role on this route returns 403; assert same side effects (availability, notification) as self-return.
+  - [x] **Test (Feature):** `tests/Feature/Admin/AdminReturnTest.php` — assert staff can return any member's borrowing; assert member role on this route returns 403; assert same side effects (availability, notification) as self-return.
 
 ---
 

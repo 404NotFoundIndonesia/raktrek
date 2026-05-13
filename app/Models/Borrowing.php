@@ -5,12 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 class Borrowing extends Model
 {
     use HasFactory;
 
     protected $fillable = ['user_id', 'book_id', 'due_date', 'return_date'];
+
+    protected $casts = [
+        'due_date'    => 'datetime',
+        'return_date' => 'datetime',
+    ];
+
+    protected $appends = ['is_overdue'];
+
+    public function getIsOverdueAttribute(): bool
+    {
+        return is_null($this->return_date) && Carbon::now()->isAfter($this->due_date);
+    }
 
     public function user(): BelongsTo
     {

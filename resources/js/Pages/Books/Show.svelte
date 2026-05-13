@@ -1,4 +1,5 @@
 <script>
+    import { useForm, usePage } from '@inertiajs/svelte';
     import Layout from '../../Components/Layout.svelte';
 
     export let book;
@@ -23,11 +24,28 @@
     };
 
     $: ratingStars = stars(averageRating);
+
+    $: user = usePage().props.user;
+
+    const borrowForm = useForm({ book_id: book.id });
+    const borrowBook = () => $borrowForm.post('/borrowings');
+
+    const renewForm = useForm({});
+    const renewBorrowing = () => userBorrowing && $renewForm.patch(`/borrowings/${userBorrowing.id}/renew`);
+
+    $: flash = usePage().props.flash || {};
 </script>
 
 <Layout>
     <div class="container">
         <a href="/books" class="back-link">← Back to catalogue</a>
+
+        {#if flash.success}
+            <div class="alert alert-success">{flash.success}</div>
+        {/if}
+        {#if $borrowForm.errors.book_id}
+            <div class="alert alert-error">{$borrowForm.errors.book_id}</div>
+        {/if}
 
         <div class="book-layout">
             <!-- Gallery -->
@@ -88,12 +106,23 @@
                     {/if}
                 </div>
 
-                <!-- Action button placeholder (Phase 5) -->
-                {#if !userBorrowing && !userWaitlistPosition}
-                    {#if availabilityLabel === 'Available'}
-                        <button class="action-btn primary" disabled>Borrow (coming soon)</button>
-                    {:else if availabilityLabel === 'Borrowed' || availabilityLabel === 'On Waitlist'}
-                        <button class="action-btn secondary" disabled>Join Waitlist (coming soon)</button>
+                <!-- Action buttons -->
+                {#if user}
+                    {#if userBorrowing}
+                        <button class="action-btn secondary" on:click={renewBorrowing} disabled={$renewForm.processing}>
+                            {$renewForm.processing ? 'Renewing…' : 'Renew Loan'}
+                        </button>
+                        {#if $renewForm.errors.borrowing}
+                            <p class="field-error">{$renewForm.errors.borrowing}</p>
+                        {/if}
+                    {:else if !userWaitlistPosition}
+                        {#if availabilityLabel === 'Available'}
+                            <button class="action-btn primary" on:click={borrowBook} disabled={$borrowForm.processing}>
+                                {$borrowForm.processing ? 'Borrowing…' : 'Borrow Book'}
+                            </button>
+                        {:else if availabilityLabel === 'Borrowed' || availabilityLabel === 'On Waitlist'}
+                            <a href="/books/{book.id}/waitlist" class="action-btn secondary">Join Waitlist</a>
+                        {/if}
                     {/if}
                 {/if}
 
@@ -263,18 +292,35 @@
     .user-status { font-size: 13px; color: #555; }
 
     .action-btn {
+        display: inline-block;
         padding: 10px 24px;
         border-radius: 10px;
         border: none;
-        cursor: not-allowed;
+        cursor: pointer;
         font-size: 14px;
         font-weight: 500;
-        margin-bottom: 16px;
-        opacity: 0.6;
+        margin-bottom: 8px;
+        text-decoration: none;
+        text-align: center;
     }
 
+    .action-btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .action-btn.primary { background: #000; color: #fff; }
+    .action-btn.primary:hover:not(:disabled) { background: #222; }
     .action-btn.secondary { background: #f3f4f6; color: #333; }
+    .action-btn.secondary:hover:not(:disabled) { background: #e5e7eb; }
+
+    .field-error { color: #dc2626; font-size: 13px; margin: 0 0 8px; }
+
+    .alert {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 16px;
+        font-size: 14px;
+    }
+
+    .alert-success { background: #d1fae5; color: #065f46; }
+    .alert-error { background: #fee2e2; color: #991b1b; }
 
     .genres { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
 

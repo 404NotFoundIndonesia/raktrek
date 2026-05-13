@@ -41,6 +41,10 @@ class HandleInertiaRequests extends Middleware
             'appName' => config('app.name'),
             'currentRouteName' => Route::currentRouteName(),
             'user' => auth()->user(),
+            'flash' => [
+                'success' => $request->session()->get('success'),
+                'error'   => $request->session()->get('error'),
+            ],
         ]);
     }
 }
