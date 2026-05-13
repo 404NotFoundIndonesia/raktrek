@@ -63,8 +63,9 @@ class BookController extends Controller
 
         $averageRating = $book->averageRating();
 
-        $userBorrowing    = null;
+        $userBorrowing        = null;
         $userWaitlistPosition = null;
+        $userReview           = null;
 
         if ($user = auth()->user()) {
             $userBorrowing = $book->histories()
@@ -80,14 +81,17 @@ class BookController extends Controller
 
                 $userWaitlistPosition = $position !== false ? $position + 1 : null;
             }
+
+            $userReview = $book->reviews->firstWhere('user_id', $user->id);
         }
 
         return Inertia::render('Books/Show', [
-            'book'                => $book,
-            'averageRating'       => $averageRating,
-            'availabilityLabel'   => $book->availabilityLabel(),
-            'userBorrowing'       => $userBorrowing,
+            'book'                 => $book,
+            'averageRating'        => $averageRating,
+            'availabilityLabel'    => $book->availabilityLabel(),
+            'userBorrowing'        => $userBorrowing,
             'userWaitlistPosition' => $userWaitlistPosition,
+            'userReview'           => $userReview,
         ]);
     }
 }

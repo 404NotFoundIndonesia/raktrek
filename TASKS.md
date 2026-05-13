@@ -141,19 +141,19 @@ Legend: ✅ = Done, 🔲 = Pending
 
 *Depends on: Phase 4 complete*
 
-- [ ] **Submit review** — `POST /books/{id}/reviews` creates a `review` record; one per user per book enforced at DB and application level
+- [x] **Submit review** — `POST /books/{id}/reviews` creates a `review` record; one per user per book enforced at DB and application level
   - DoD: Duplicate review returns 422; `rate` validated as integer 1–5; `comment` optional; book detail page refreshes average rating after submit.
-  - [ ] **Test (Feature):** `tests/Feature/Review/SubmitReviewTest.php` — assert valid payload creates review; assert `rate = 0` or `rate = 6` returns 422; assert duplicate review returns 422; assert guest redirects to login; assert book's average rating is recalculated after submission.
+  - [x] **Test (Feature):** `tests/Feature/Review/SubmitReviewTest.php` — assert valid payload creates review; assert `rate = 0` or `rate = 6` returns 422; assert duplicate review returns 422; assert guest redirects to login; assert book's average rating is recalculated after submission.
 
-- [ ] **Edit review** — `PUT /reviews/{id}` updates `rate` and/or `comment`; restricted to review owner
+- [x] **Edit review** — `PUT /reviews/{id}` updates `rate` and/or `comment`; restricted to review owner
   - DoD: Non-owner returns 403; updated values reflected immediately on book detail.
-  - [ ] **Test (Feature):** `tests/Feature/Review/EditReviewTest.php` — assert owner can update `rate` and `comment`; assert non-owner returns 403; assert updated `rate` changes book average rating.
+  - [x] **Test (Feature):** `tests/Feature/Review/EditReviewTest.php` — assert owner can update `rate` and `comment`; assert non-owner returns 403; assert updated `rate` changes book average rating.
 
-- [ ] **Delete review** — `DELETE /reviews/{id}` removes record; restricted to owner or staff
+- [x] **Delete review** — `DELETE /reviews/{id}` removes record; restricted to owner or staff
   - DoD: Average rating recalculated after deletion; review no longer appears on book detail.
-  - [ ] **Test (Feature):** `tests/Feature/Review/DeleteReviewTest.php` — assert owner can delete own review; assert staff can delete any review; assert non-owner member returns 403; assert book average rating recalculated after deletion.
+  - [x] **Test (Feature):** `tests/Feature/Review/DeleteReviewTest.php` — assert owner can delete own review; assert staff can delete any review; assert non-owner member returns 403; assert book average rating recalculated after deletion.
 
-- [ ] **Reviews UI on book detail** — list of reviews with reviewer name, rating stars, comment, date; member's own review shows edit/delete controls
+- [x] **Reviews UI on book detail** — list of reviews with reviewer name, rating stars, comment, date; member's own review shows edit/delete controls
   - DoD: Average displayed as star visual + numeric value; empty state shown when no reviews exist.
 
 ---

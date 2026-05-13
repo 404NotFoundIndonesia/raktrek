@@ -7,6 +7,7 @@
     export let availabilityLabel;
     export let userBorrowing;
     export let userWaitlistPosition;
+    export let userReview;
 
     let activeImage = book.images && book.images.length > 0 ? book.images[0] : null;
 
@@ -35,6 +36,14 @@
 
     const waitlistForm = useForm({ book_id: book.id });
     const joinWaitlist = () => $waitlistForm.post('/waitlists');
+
+    const reviewForm = useForm({ rate: userReview ? userReview.rate : 5, comment: userReview ? userReview.comment || '' : '' });
+    const submitReview = () => $reviewForm.post(`/books/${book.id}/reviews`);
+    const updateReview = () => userReview && $reviewForm.put(`/reviews/${userReview.id}`);
+    const deleteReviewForm = useForm({});
+    const deleteReview = () => userReview && $deleteReviewForm.delete(`/reviews/${userReview.id}`);
+
+    let editingReview = false;
 
     $: flash = usePage().props.flash || {};
 </script>
@@ -181,15 +190,75 @@
 
         <!-- Reviews -->
         <section class="reviews-section">
-            <h3>Reviews ({book.reviews ? book.reviews.length : 0})</h3>
+            <div class="reviews-header">
+                <h3>Reviews ({book.reviews ? book.reviews.length : 0})</h3>
+                <div class="avg-rating">
+                    <span class="stars-avg">{'★'.repeat(Math.round(averageRating))}{'☆'.repeat(5 - Math.round(averageRating))}</span>
+                    <span class="avg-val">{averageRating > 0 ? averageRating : '—'}</span>
+                </div>
+            </div>
+
+            <!-- Submit / edit review form -->
+            {#if user && !userReview && !editingReview}
+                <div class="review-form">
+                    <h4>Write a Review</h4>
+                    <div class="rate-select">
+                        {#each [1,2,3,4,5] as n}
+                            <button
+                                class="star-btn {$reviewForm.rate >= n ? 'filled' : ''}"
+                                on:click={() => $reviewForm.rate = n}
+                                type="button"
+                            >★</button>
+                        {/each}
+                        <span class="rate-label">{$reviewForm.rate}/5</span>
+                    </div>
+                    {#if $reviewForm.errors.rate}
+                        <p class="field-error">{$reviewForm.errors.rate}</p>
+                    {/if}
+                    <textarea class="review-textarea" bind:value={$reviewForm.comment} placeholder="Share your thoughts (optional)…" rows="3"></textarea>
+                    <button class="btn-submit-review" on:click={submitReview} disabled={$reviewForm.processing}>
+                        {$reviewForm.processing ? 'Submitting…' : 'Submit Review'}
+                    </button>
+                </div>
+            {/if}
+
+            {#if user && userReview && editingReview}
+                <div class="review-form">
+                    <h4>Edit Your Review</h4>
+                    <div class="rate-select">
+                        {#each [1,2,3,4,5] as n}
+                            <button
+                                class="star-btn {$reviewForm.rate >= n ? 'filled' : ''}"
+                                on:click={() => $reviewForm.rate = n}
+                                type="button"
+                            >★</button>
+                        {/each}
+                        <span class="rate-label">{$reviewForm.rate}/5</span>
+                    </div>
+                    <textarea class="review-textarea" bind:value={$reviewForm.comment} rows="3"></textarea>
+                    <div class="form-actions">
+                        <button class="btn-submit-review" on:click={updateReview} disabled={$reviewForm.processing}>Save</button>
+                        <button class="btn-cancel" on:click={() => editingReview = false}>Cancel</button>
+                    </div>
+                </div>
+            {/if}
+
             {#if book.reviews && book.reviews.length > 0}
                 <div class="reviews-list">
-                    {#each book.reviews as review}
-                        <div class="review-item">
+                    {#each book.reviews as review (review.id)}
+                        <div class="review-item {userReview && review.id === userReview.id ? 'own-review' : ''}">
                             <div class="review-header">
                                 <span class="reviewer">{review.user ? review.user.name : 'Anonymous'}</span>
                                 <span class="review-stars">{'★'.repeat(Math.round(review.rate))}{'☆'.repeat(5 - Math.round(review.rate))}</span>
                                 <span class="review-date">{new Date(review.created_at).toLocaleDateString()}</span>
+                                {#if user && (review.user_id === user.id || user.role === 'staff')}
+                                    <div class="review-actions">
+                                        {#if review.user_id === user.id}
+                                            <button class="btn-edit-review" on:click={() => { editingReview = true; $reviewForm.rate = review.rate; $reviewForm.comment = review.comment || ''; }}>Edit</button>
+                                        {/if}
+                                        <button class="btn-delete-review" on:click={deleteReview}>Delete</button>
+                                    </div>
+                                {/if}
                             </div>
                             {#if review.comment}
                                 <p class="review-comment">{review.comment}</p>
@@ -198,7 +267,7 @@
                     {/each}
                 </div>
             {:else}
-                <p class="no-reviews">No reviews yet. Be the first to review!</p>
+                <p class="no-reviews">No reviews yet.{#if user} Be the first to review!{/if}</p>
             {/if}
         </section>
     </div>
@@ -366,11 +435,92 @@
         padding: 14px 16px;
     }
 
+    .reviews-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+    .reviews-header h3 { margin: 0; }
+    .avg-rating { display: flex; align-items: center; gap: 8px; }
+    .stars-avg { color: #f59e0b; font-size: 16px; }
+    .avg-val { font-size: 14px; color: #555; }
+
+    .review-form {
+        background: #f9fafb;
+        border: 1px solid #e5e5e5;
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+    .review-form h4 { margin: 0 0 12px; font-size: 15px; }
+
+    .rate-select { display: flex; align-items: center; gap: 4px; margin-bottom: 8px; }
+    .star-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: #ddd;
+        padding: 0;
+        line-height: 1;
+    }
+    .star-btn.filled { color: #f59e0b; }
+    .rate-label { font-size: 13px; color: #888; margin-left: 8px; }
+
+    .review-textarea {
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 14px;
+        resize: vertical;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+
+    .btn-submit-review {
+        background: #000;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 20px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    .btn-submit-review:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-submit-review:hover:not(:disabled) { background: #222; }
+
+    .btn-cancel {
+        background: #f3f4f6;
+        color: #333;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 20px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    .btn-cancel:hover { background: #e5e7eb; }
+
+    .form-actions { display: flex; gap: 8px; }
+
     .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
     .reviewer { font-weight: 600; font-size: 14px; }
     .review-stars { color: #f59e0b; font-size: 14px; }
     .review-date { color: #aaa; font-size: 12px; margin-left: auto; }
     .review-comment { color: #555; font-size: 14px; margin: 0; }
+
+    .own-review { border-color: #a5b4fc; background: #f5f3ff; }
+
+    .review-actions { display: flex; gap: 6px; margin-left: 8px; }
+    .btn-edit-review, .btn-delete-review {
+        background: none;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 2px 10px;
+        cursor: pointer;
+        font-size: 11px;
+        color: #555;
+    }
+    .btn-delete-review { color: #dc2626; border-color: #fca5a5; }
+    .btn-edit-review:hover { background: #f3f4f6; }
+    .btn-delete-review:hover { background: #fee2e2; }
 
     .no-reviews { color: #999; font-size: 14px; }
 

@@ -56,6 +56,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/waitlists', [\App\Http\Controllers\WaitlistController::class, 'store'])->name('waitlists.store');
     Route::delete('/waitlists/{waitingList}', [\App\Http\Controllers\WaitlistController::class, 'destroy'])->name('waitlists.destroy');
     Route::get('/my/waitlists', [\App\Http\Controllers\WaitlistController::class, 'myWaitlists'])->name('my.waitlists');
+
+    Route::post('/books/{book}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
+    Route::put('/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'update'])->name('reviews.update');
+    Route::delete('/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
 });
 
 /*
