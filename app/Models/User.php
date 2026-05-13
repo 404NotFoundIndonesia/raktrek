@@ -23,8 +23,13 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
+        'address',
         'role',
         'google_id',
+    ];
+
+    protected $attributes = [
+        'role' => 'member',
     ];
 
     /**
