@@ -11,11 +11,12 @@ class Borrowing extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'book_id', 'due_date', 'return_date'];
+    protected $fillable = ['user_id', 'book_id', 'due_date', 'return_date', 'last_overdue_notified_at'];
 
     protected $casts = [
-        'due_date'    => 'datetime',
-        'return_date' => 'datetime',
+        'due_date'                  => 'datetime',
+        'return_date'               => 'datetime',
+        'last_overdue_notified_at'  => 'datetime',
     ];
 
     protected $appends = ['is_overdue'];

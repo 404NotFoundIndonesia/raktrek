@@ -28,6 +28,16 @@
         preserveScroll: true,
         onSuccess: () => $passwordForm.reset(),
     });
+
+    const prefs = user.notification_preferences ?? {};
+    const notifForm = useForm({
+        book_available_email:    prefs.book_available_email    ?? true,
+        due_date_reminder_email: prefs.due_date_reminder_email ?? true,
+        overdue_alert_email:     prefs.overdue_alert_email     ?? true,
+        new_book_email:          prefs.new_book_email          ?? true,
+    });
+
+    const saveNotifPrefs = () => $notifForm.put('/profile/notification-preferences', { preserveScroll: true });
 </script>
 
 <Layout>
@@ -67,6 +77,32 @@
 
                 <Button class="primary" on:click={updateProfile} disabled={$profileForm.processing}>
                     Save Changes
+                </Button>
+            </section>
+
+            <section class="card">
+                <h2 class="section-title">Notification Preferences</h2>
+                <p class="pref-hint">Choose which email notifications you want to receive.</p>
+
+                <label class="toggle-row">
+                    <input type="checkbox" bind:checked={$notifForm.book_available_email} />
+                    <span>Email when a waitlisted book becomes available</span>
+                </label>
+                <label class="toggle-row">
+                    <input type="checkbox" bind:checked={$notifForm.due_date_reminder_email} />
+                    <span>Email reminder 3 days before loan due date</span>
+                </label>
+                <label class="toggle-row">
+                    <input type="checkbox" bind:checked={$notifForm.overdue_alert_email} />
+                    <span>Email alert when a loan is overdue</span>
+                </label>
+                <label class="toggle-row">
+                    <input type="checkbox" bind:checked={$notifForm.new_book_email} />
+                    <span>Email when a favourite author adds a new book</span>
+                </label>
+
+                <Button class="primary" on:click={saveNotifPrefs} disabled={$notifForm.processing}>
+                    Save Preferences
                 </Button>
             </section>
 
@@ -136,4 +172,24 @@
         margin-bottom: 15px;
         font-size: 13px;
     }
+
+    .pref-hint { font-size: 13px; color: #888; margin: 0 0 14px; }
+
+    .toggle-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .toggle-row input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: #000;
+    }
+
+    .form-error { color: #dc2626; font-size: 12px; margin: 2px 0 0; }
 </style>

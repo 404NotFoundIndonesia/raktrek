@@ -28,6 +28,7 @@ class User extends Authenticatable
         'address',
         'role',
         'google_id',
+        'notification_preferences',
     ];
 
     protected $attributes = [
@@ -51,9 +52,16 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'email_verified_at'        => 'datetime',
+        'password'                 => 'hashed',
+        'notification_preferences' => 'array',
     ];
+
+    public function wantsEmailNotification(string $type): bool
+    {
+        $prefs = $this->notification_preferences ?? [];
+        return $prefs[$type] ?? true;
+    }
 
     public function favouriteAuthors(): BelongsToMany
     {

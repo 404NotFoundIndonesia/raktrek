@@ -18,6 +18,18 @@
     </button>
 
     <span>{$page.props.appName}</span>
+
+    {#if $page.props.user}
+        <a href="/notifications" use:inertia class="bell-btn" aria-label="Notifications">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            {#if $page.props.unreadNotificationCount > 0}
+                <span class="bell-badge">{$page.props.unreadNotificationCount > 9 ? '9+' : $page.props.unreadNotificationCount}</span>
+            {/if}
+        </a>
+    {/if}
 </header>
 
 <main>
@@ -163,6 +175,38 @@
         line-height: 1;
         font-weight: 500;
         display: inline-block;
+        flex: 1;
+    }
+
+    .bell-btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: #333;
+        text-decoration: none;
+        padding: 4px;
+        border-radius: 8px;
+        margin-left: auto;
+    }
+
+    .bell-btn:hover { color: #000; background: #f3f4f6; }
+
+    .bell-badge {
+        position: absolute;
+        top: -2px;
+        right: -4px;
+        background: #e11d48;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        min-width: 16px;
+        height: 16px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 3px;
+        line-height: 1;
     }
 
     nav.side-menu {

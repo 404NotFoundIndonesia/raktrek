@@ -37,14 +37,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = auth()->user();
+
         return array_merge(parent::share($request), [
             'appName' => config('app.name'),
             'currentRouteName' => Route::currentRouteName(),
-            'user' => auth()->user(),
+            'user' => $user,
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error'   => $request->session()->get('error'),
             ],
+            'unreadNotificationCount' => $user ? $user->unreadNotifications()->count() : 0,
         ]);
     }
 }

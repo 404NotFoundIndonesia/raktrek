@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'changePassword'])->name('profile.password');
+    Route::put('/profile/notification-preferences', [\App\Http\Controllers\ProfileController::class, 'updateNotificationPreferences'])->name('profile.notification-preferences');
 });
 
 /*
@@ -63,6 +64,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/authors/{author}/favourite', [\App\Http\Controllers\FavouriteAuthorController::class, 'store'])->name('authors.favourite');
     Route::delete('/authors/{author}/favourite', [\App\Http\Controllers\FavouriteAuthorController::class, 'destroy'])->name('authors.unfavourite');
+
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
 });
 
 /*
@@ -75,6 +79,7 @@ Route::middleware(['auth', 'role:staff'])->prefix('admin')->name('admin.')->grou
     Route::patch('/borrowings/{borrowing}/return', [\App\Http\Controllers\Admin\AdminBorrowingController::class, 'processReturn'])->name('borrowings.return');
     Route::get('/books/{book}/waitlists', [\App\Http\Controllers\Admin\AdminWaitlistController::class, 'index'])->name('books.waitlists');
     Route::delete('/waitlists/{waitingList}', [\App\Http\Controllers\Admin\AdminWaitlistController::class, 'destroy'])->name('waitlists.destroy');
+    Route::post('/books', [\App\Http\Controllers\Admin\AdminBookController::class, 'store'])->name('books.store');
 });
 
 /*

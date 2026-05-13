@@ -180,37 +180,37 @@ Legend: ✅ = Done, 🔲 = Pending
 
 *Depends on: Phase 5, Phase 6, Phase 8 complete*
 
-- [ ] **Notification model & migration** — `notifications` table via `php artisan notifications:table`; `User` model uses `Notifiable` trait
+- [x] **Notification model & migration** — `notifications` table via `php artisan notifications:table`; `User` model uses `Notifiable` trait
   - DoD: `php artisan migrate` creates table; notification can be stored and retrieved via `$user->notifications`.
-  - [ ] **Test (Unit):** `tests/Unit/Models/UserNotifiableTest.php` — assert `User` has `notifications` relationship returning `DatabaseNotification` instances; assert `unreadNotifications` scope filters correctly.
+  - [x] **Test (Unit):** `tests/Unit/Models/UserNotifiableTest.php` — assert `User` has `notifications` relationship returning `DatabaseNotification` instances; assert `unreadNotifications` scope filters correctly.
 
-- [ ] **In-app notification centre** — bell icon in navbar with unread count badge; `GET /notifications` lists recent; `POST /notifications/{id}/read` marks as read
+- [x] **In-app notification centre** — bell icon in navbar with unread count badge; `GET /notifications` lists recent; `POST /notifications/{id}/read` marks as read
   - DoD: Unread count updates on page load; clicking a notification marks it read and navigates to relevant page.
-  - [ ] **Test (Feature):** `tests/Feature/Notification/NotificationCentreTest.php` — assert `GET /notifications` returns member's notifications; assert `POST /notifications/{id}/read` sets `read_at`; assert non-owner cannot mark another user's notification as read; assert guest redirects to login.
+  - [x] **Test (Feature):** `tests/Feature/Notification/NotificationCentreTest.php` — assert `GET /notifications` returns member's notifications; assert `POST /notifications/{id}/read` sets `read_at`; assert non-owner cannot mark another user's notification as read; assert guest redirects to login.
 
-- [ ] **Due date reminder** — scheduled command finds borrowings where `due_date = today + 3` and `return_date` is null; sends `DueDateReminderNotification`
+- [x] **Due date reminder** — scheduled command finds borrowings where `due_date = today + 3` and `return_date` is null; sends `DueDateReminderNotification`
   - DoD: `php artisan schedule:run` triggers command; notification stored for borrower.
-  - [ ] **Test (Unit):** `tests/Unit/Console/DueDateReminderTest.php` — use `Notification::fake()`; seed borrowing due in 3 days; run command; assert `DueDateReminderNotification` sent to correct user; assert borrowing not due in 3 days does not trigger notification.
+  - [x] **Test (Unit):** `tests/Unit/Console/DueDateReminderTest.php` — use `Notification::fake()`; seed borrowing due in 3 days; run command; assert `DueDateReminderNotification` sent to correct user; assert borrowing not due in 3 days does not trigger notification.
 
-- [ ] **Overdue alert** — scheduled command finds borrowings where `due_date < today` and `return_date` is null; sends `OverdueAlertNotification` once per day
+- [x] **Overdue alert** — scheduled command finds borrowings where `due_date < today` and `return_date` is null; sends `OverdueAlertNotification` once per day
   - DoD: Notification sent once per day per overdue loan; not re-sent if already notified today.
-  - [ ] **Test (Unit):** `tests/Unit/Console/OverdueAlertTest.php` — assert notification sent for overdue borrowing; assert notification not re-sent if `OverdueAlertNotification` already exists for that borrowing today.
+  - [x] **Test (Unit):** `tests/Unit/Console/OverdueAlertTest.php` — assert notification sent for overdue borrowing; assert notification not re-sent if `OverdueAlertNotification` already exists for that borrowing today.
 
-- [ ] **Waitlist available notification** — triggered on book return; notifies first member in waitlist queue via `BookAvailableNotification`
+- [x] **Waitlist available notification** — triggered on book return; notifies first member in waitlist queue via `BookAvailableNotification`
   - DoD: Notification created immediately on return; contains book title and link to book detail.
-  - [ ] **Test (Feature):** Add to `tests/Feature/Borrowing/ReturnTest.php` — use `Notification::fake()`; seed a waitlist with two members; return the book; assert `BookAvailableNotification` sent only to first-in-queue member.
+  - [x] **Test (Feature):** Add to `tests/Feature/Borrowing/ReturnTest.php` — use `Notification::fake()`; seed a waitlist with two members; return the book; assert `BookAvailableNotification` sent only to first-in-queue member.
 
-- [ ] **New book by favourite author** — triggered when staff creates a book; dispatches `NewBookByFavouriteAuthorNotification` as queued job to all members who favourited the author
+- [x] **New book by favourite author** — triggered when staff creates a book; dispatches `NewBookByFavouriteAuthorNotification` as queued job to all members who favourited the author
   - DoD: Notification dispatched as queued job; members receive in-app notification.
-  - [ ] **Test (Feature):** `tests/Feature/Notification/NewBookNotificationTest.php` — use `Notification::fake()` and `Queue::fake()`; staff creates book; assert notification dispatched for all users who favourited the author; assert user who did not favourite the author receives nothing.
+  - [x] **Test (Feature):** `tests/Feature/Notification/NewBookNotificationTest.php` — use `Notification::fake()` and `Queue::fake()`; staff creates book; assert notification dispatched for all users who favourited the author; assert user who did not favourite the author receives nothing.
 
-- [ ] **Email notification channel** — wrap notifications with `Mail` channel alongside `database` channel; create Mailables per notification type
+- [x] **Email notification channel** — wrap notifications with `Mail` channel alongside `database` channel; create Mailables per notification type
   - DoD: Notifications send both in-app and email; email renders with correct book/due date data.
-  - [ ] **Test (Unit):** `tests/Unit/Notifications/` — for each Mailable, assert `assertSeeInText` contains expected content (book title, due date); assert `via()` returns both `database` and `mail` channels.
+  - [x] **Test (Unit):** `tests/Unit/Notifications/` — for each Mailable, assert `assertSeeInText` contains expected content (book title, due date); assert `via()` returns both `database` and `mail` channels.
 
-- [ ] **Notification preferences** — member toggles email notifications per type in profile settings; preference persisted on `user` table or `notification_settings`
+- [x] **Notification preferences** — member toggles email notifications per type in profile settings; preference persisted on `user` table or `notification_settings`
   - DoD: Email channel skipped when preference disabled for that notification type.
-  - [ ] **Test (Feature):** `tests/Feature/Notification/NotificationPreferenceTest.php` — assert `PUT /profile/notification-preferences` saves preference; assert when email disabled for a type, notification `via()` returns only `database`; assert `GET /profile` includes current preferences in props.
+  - [x] **Test (Feature):** `tests/Feature/Notification/NotificationPreferenceTest.php` — assert `PUT /profile/notification-preferences` saves preference; assert when email disabled for a type, notification `via()` returns only `database`; assert `GET /profile` includes current preferences in props.
 
 ---
 
