@@ -254,14 +254,14 @@ Legend: ✅ = Done, 🔲 = Pending
 
 ## Phase 11 — QA & Polish
 
-- [ ] **Responsive UI audit** — test all pages on mobile (375px), tablet (768px), desktop (1280px)
+- [x] **Responsive UI audit** — test all pages on mobile (375px), tablet (768px), desktop (1280px)
   - DoD: No horizontal scroll on mobile; navigation collapses to hamburger; book grid reflows correctly.
 
-- [ ] **Accessibility** — form labels, image alt text, keyboard navigation on modal/gallery
+- [x] **Accessibility** — form labels, image alt text, keyboard navigation on modal/gallery
   - DoD: Lighthouse accessibility score ≥ 90 on Home, Book Detail, and Explore pages.
 
-- [ ] **N+1 query audit** — enable query logging in tests; assert no route executes more than a set query threshold
+- [x] **N+1 query audit** — enable query logging in tests; assert no route executes more than a set query threshold
   - DoD: `GET /books`, `GET /books/{id}`, `GET /my/borrowings` each execute ≤ 5 queries (eager loading verified).
 
-- [ ] **Test coverage gate** — ensure all feature and unit tests pass on CI
+- [x] **Test coverage gate** — ensure all feature and unit tests pass on CI
   - DoD: `php artisan test` exits 0; no skipped tests without explicit annotation.

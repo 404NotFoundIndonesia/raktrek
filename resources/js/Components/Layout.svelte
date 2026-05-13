@@ -10,8 +10,10 @@
     const logout = () => router.post('/logout');
 </script>
 
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <header class="title-header">
-    <button class="burger" class:active={openMenu} on:click={toggleMenu}>
+    <button class="burger" class:active={openMenu} on:click={toggleMenu} aria-label={openMenu ? 'Close navigation menu' : 'Open navigation menu'} aria-expanded={openMenu}>
         <div class="burger-bar-top"></div>
         <div class="burger-bar-middle"></div>
         <div class="burger-bar-bottom"></div>
@@ -32,7 +34,7 @@
     {/if}
 </header>
 
-<main>
+<main id="main-content">
     <slot />
 </main>
 
@@ -75,7 +77,7 @@
         </a>
     </div>
     <div>
-        <span aria-hidden="true" on:click={logout} class="footer-menu-link">
+        <button type="button" on:click={logout} class="footer-menu-link footer-logout-btn" aria-label="Logout">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-logout" width="30" height="30" viewBox="0 0 24 24" stroke-width="1" stroke="#000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                 <path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2" />
@@ -83,7 +85,7 @@
                 <path d="M18 15l3 -3" />
             </svg>
             <span>Logout</span>
-        </span>
+        </button>
     </div>
     {:else}
     <div>
@@ -106,7 +108,7 @@
     <a href="/explore" use:inertia class:active={ currentRoute === 'explore' }>Explore</a>
     {#if $page.props.user != null}
     <a href="/profile" use:inertia class:active={ currentRoute === 'profile' }>Profile</a>
-    <span aria-hidden="true" on:click={logout} class:active={ currentRoute === 'auth.login' }>Logout</span>
+    <button type="button" on:click={logout} class="side-menu-btn" class:active={ currentRoute === 'auth.login' }>Logout</button>
     {:else}
     <a href="/login" use:inertia class:active={ currentRoute === 'auth.login' || currentRoute === 'auth.register' }>Login</a>
     {/if}
@@ -243,13 +245,14 @@
 
     nav.footer-menu {
         display: none;
-        position: absolute;
+        position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
         justify-content: space-around;
         align-items: center;
         padding: 10px 0;
+        background: #fff;
         box-shadow: 0 -5px 15px 0 rgba(0,0,0,0.09);
         z-index: 100;
     }
@@ -285,6 +288,47 @@
         flex-direction: column;
         align-items: center;
     }
+
+    .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 8px;
+        background: #000;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        text-decoration: none;
+        z-index: 9999;
+        transition: top 0.1s;
+    }
+
+    .skip-link:focus {
+        top: 8px;
+    }
+
+    .footer-logout-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        font-size: 12px;
+        font-family: inherit;
+    }
+
+    .side-menu-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: rgb(203, 203, 203);
+        font-size: inherit;
+        font-family: inherit;
+        padding: 0;
+        text-align: left;
+    }
+
+    .side-menu-btn:hover { text-decoration: underline; }
+    .side-menu-btn.active { text-decoration: underline; font-weight: 600; color: white; }
 
     main {
         position: relative;

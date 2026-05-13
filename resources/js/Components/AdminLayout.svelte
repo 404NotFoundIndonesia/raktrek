@@ -2,10 +2,19 @@
     import { page, inertia } from '@inertiajs/svelte';
 
     const currentRoute = $page.props.currentRouteName;
+    let sidebarOpen = false;
 </script>
 
 <div class="admin-shell">
-    <aside class="sidebar">
+    <button type="button" class="sidebar-toggle" on:click={() => sidebarOpen = !sidebarOpen} aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'} aria-expanded={sidebarOpen}>
+        <span></span><span></span><span></span>
+    </button>
+
+    {#if sidebarOpen}
+        <button type="button" class="sidebar-overlay" on:click={() => sidebarOpen = false} aria-label="Close sidebar"></button>
+    {/if}
+
+    <aside class="sidebar" class:open={sidebarOpen}>
         <div class="sidebar-header">
             <a href="/" use:inertia class="logo">{$page.props.appName}</a>
             <span class="admin-label">Admin</span>
@@ -99,5 +108,62 @@
         padding: 30px;
         background: #f9fafb;
         min-height: 100vh;
+    }
+
+    .sidebar-toggle {
+        display: none;
+        position: fixed;
+        top: 12px;
+        left: 12px;
+        z-index: 200;
+        background: #111;
+        border: none;
+        border-radius: 6px;
+        width: 36px;
+        height: 36px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        padding: 8px;
+    }
+
+    .sidebar-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background: #fff;
+        border-radius: 2px;
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 49;
+        border: none;
+        cursor: default;
+    }
+
+    @media (max-width: 768px) {
+        .sidebar-toggle { display: flex; }
+        .sidebar-overlay { display: block; }
+
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.2s ease;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .admin-main {
+            margin-left: 0;
+            padding: 16px;
+            padding-top: 60px;
+        }
     }
 </style>

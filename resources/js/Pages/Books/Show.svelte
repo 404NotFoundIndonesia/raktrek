@@ -90,13 +90,15 @@
                     {/if}
                 </div>
                 {#if book.images && book.images.length > 1}
-                    <div class="thumbnails">
-                        {#each book.images as img}
+                    <div class="thumbnails" role="group" aria-label="Book images">
+                        {#each book.images as img, i}
                             <button
                                 class="thumb {activeImage && activeImage.id === img.id ? 'active' : ''}"
                                 on:click={() => activeImage = img}
+                                aria-label={img.description || `Book image ${i + 1}`}
+                                aria-pressed={activeImage && activeImage.id === img.id}
                             >
-                                <img src="/storage/{img.path}" alt={img.description || ''} />
+                                <img src="/storage/{img.path}" alt="" aria-hidden="true" />
                             </button>
                         {/each}
                     </div>
@@ -224,21 +226,24 @@
             <!-- Submit / edit review form -->
             {#if user && !userReview && !editingReview}
                 <div class="review-form">
-                    <h4>Write a Review</h4>
-                    <div class="rate-select">
+                    <h4 id="write-review-heading">Write a Review</h4>
+                    <div class="rate-select" role="group" aria-labelledby="write-review-heading">
                         {#each [1,2,3,4,5] as n}
                             <button
                                 class="star-btn {$reviewForm.rate >= n ? 'filled' : ''}"
                                 on:click={() => $reviewForm.rate = n}
                                 type="button"
+                                aria-label="Rate {n} star{n > 1 ? 's' : ''}"
+                                aria-pressed={$reviewForm.rate >= n}
                             >★</button>
                         {/each}
-                        <span class="rate-label">{$reviewForm.rate}/5</span>
+                        <span class="rate-label" aria-live="polite">{$reviewForm.rate}/5</span>
                     </div>
                     {#if $reviewForm.errors.rate}
                         <p class="field-error">{$reviewForm.errors.rate}</p>
                     {/if}
-                    <textarea class="review-textarea" bind:value={$reviewForm.comment} placeholder="Share your thoughts (optional)…" rows="3"></textarea>
+                    <label for="review-comment" class="sr-only">Your review (optional)</label>
+                    <textarea id="review-comment" class="review-textarea" bind:value={$reviewForm.comment} placeholder="Share your thoughts (optional)…" rows="3" aria-label="Your review (optional)"></textarea>
                     <button class="btn-submit-review" on:click={submitReview} disabled={$reviewForm.processing}>
                         {$reviewForm.processing ? 'Submitting…' : 'Submit Review'}
                     </button>
@@ -247,18 +252,21 @@
 
             {#if user && userReview && editingReview}
                 <div class="review-form">
-                    <h4>Edit Your Review</h4>
-                    <div class="rate-select">
+                    <h4 id="edit-review-heading">Edit Your Review</h4>
+                    <div class="rate-select" role="group" aria-labelledby="edit-review-heading">
                         {#each [1,2,3,4,5] as n}
                             <button
                                 class="star-btn {$reviewForm.rate >= n ? 'filled' : ''}"
                                 on:click={() => $reviewForm.rate = n}
                                 type="button"
+                                aria-label="Rate {n} star{n > 1 ? 's' : ''}"
+                                aria-pressed={$reviewForm.rate >= n}
                             >★</button>
                         {/each}
-                        <span class="rate-label">{$reviewForm.rate}/5</span>
+                        <span class="rate-label" aria-live="polite">{$reviewForm.rate}/5</span>
                     </div>
-                    <textarea class="review-textarea" bind:value={$reviewForm.comment} rows="3"></textarea>
+                    <label for="edit-review-comment" class="sr-only">Your review (optional)</label>
+                    <textarea id="edit-review-comment" class="review-textarea" bind:value={$reviewForm.comment} rows="3" aria-label="Your review (optional)"></textarea>
                     <div class="form-actions">
                         <button class="btn-submit-review" on:click={updateReview} disabled={$reviewForm.processing}>Save</button>
                         <button class="btn-cancel" on:click={() => editingReview = false}>Cancel</button>

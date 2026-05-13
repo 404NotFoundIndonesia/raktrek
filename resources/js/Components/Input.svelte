@@ -20,7 +20,7 @@
         <slot name="end-input"></slot>
 
         {#if defaultType === 'password'}
-        <div aria-label="toggle show password" class="toggle-password" aria-hidden="true" on:click={toggleShowPassword}>
+        <button type="button" class="toggle-password" aria-label={type === 'password' ? 'Show password' : 'Hide password'} on:click={toggleShowPassword}>
             {#if type === 'password'}
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -37,7 +37,7 @@
                 <path d="M15 17l-.5 -4" />
             </svg>
             {/if}
-        </div>
+        </button>
         {/if}
     </div>
     <slot />
@@ -63,11 +63,17 @@
         margin-bottom: 15px;
     }
 
-    .wrapper > .input-group > div.toggle-password {
+    .wrapper > .input-group > button.toggle-password {
         position: absolute;
         z-index: 50;
         top: 25%;
         right: 15px;
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
     }
 
     ::placeholder {
