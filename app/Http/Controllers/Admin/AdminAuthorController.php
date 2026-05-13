@@ -46,7 +46,7 @@ class AdminAuthorController extends Controller
 
         Author::create([
             'name'  => $data['name'],
-            'about' => $data['about'] ?? null,
+            'about' => $data['about'] ?? '',
             'photo' => $photoPath,
         ]);
 
@@ -76,7 +76,7 @@ class AdminAuthorController extends Controller
 
         $author->update([
             'name'  => $data['name'],
-            'about' => $data['about'] ?? $author->about,
+            'about' => $data['about'] ?? $author->about ?? '',
             'photo' => $photoPath,
         ]);
 
