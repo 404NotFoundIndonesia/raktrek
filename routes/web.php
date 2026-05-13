@@ -16,9 +16,32 @@ Route::post('logout', [\App\Http\Controllers\AuthController::class, 'signOut'])-
 
 /*
 |--------------------------------------------------------------------------
+| Google OAuth
+|--------------------------------------------------------------------------
+*/
+
+Route::get('auth/google', [\App\Http\Controllers\SocialiteController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [\App\Http\Controllers\SocialiteController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+/*
+|--------------------------------------------------------------------------
+| Profile (auth required)
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'changePassword'])->name('profile.password');
+});
+
+/*
+|--------------------------------------------------------------------------
 | Main Route
 |--------------------------------------------------------------------------
 */
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'home'])->name('home');
-Route::get('/explore', [\App\Http\Controllers\HomeController::class, 'explore'])->name('explore');
+Route::get('/explore', [\App\Http\Controllers\BookController::class, 'index'])->name('explore');
+Route::get('/books', [\App\Http\Controllers\BookController::class, 'index'])->name('books.index');
+Route::get('/books/{book}', [\App\Http\Controllers\BookController::class, 'show'])->name('books.show');

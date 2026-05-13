@@ -33,27 +33,27 @@ Legend: ✅ = Done, 🔲 = Pending
 
 - [x] **Register** — form with name, email, phone, address, password, password confirmation
   - DoD: Submitting valid data creates a `user` record with `role = member`; user is logged in and redirected to home.
-  - [ ] **Test (Feature):** `tests/Feature/Auth/RegisterTest.php` — assert valid payload creates user with `role = member` and redirects to `/`; assert missing name/email/password returns 422; assert duplicate email returns 422; assert password mismatch returns 422.
+  - [x] **Test (Feature):** `tests/Feature/Auth/RegisterTest.php` — assert valid payload creates user with `role = member` and redirects to `/`; assert missing name/email/password returns 422; assert duplicate email returns 422; assert password mismatch returns 422.
 
 - [x] **Login** — email + password form, "remember me" option
   - DoD: Valid credentials log user in; invalid credentials return translated error from `auth.failed`; guests on auth pages redirect to home if already logged in.
-  - [ ] **Test (Feature):** `tests/Feature/Auth/LoginTest.php` — assert valid credentials authenticate and redirect to `/`; assert wrong password returns error bag with `auth.failed`; assert authenticated user visiting `/login` redirects to `/`.
+  - [x] **Test (Feature):** `tests/Feature/Auth/LoginTest.php` — assert valid credentials authenticate and redirect to `/`; assert wrong password returns error bag with `auth.failed`; assert authenticated user visiting `/login` redirects to `/`.
 
-- [ ] **Logout** — POST `/logout` clears session
+- [x] **Logout** — POST `/logout` clears session
   - DoD: After logout, visiting a member-only route redirects to `/login`.
-  - [ ] **Test (Feature):** `tests/Feature/Auth/LogoutTest.php` — assert `POST /logout` as authenticated user returns redirect to `/`; assert subsequent `GET /my/borrowings` (member-only) redirects to `/login`.
+  - [x] **Test (Feature):** `tests/Feature/Auth/LogoutTest.php` — assert `POST /logout` as authenticated user returns redirect to `/`; assert subsequent `GET /my/borrowings` (member-only) redirects to `/login`.
 
-- [ ] **Profile page** — member views and edits name, email, phone, address
+- [x] **Profile page** — member views and edits name, email, phone, address
   - DoD: `GET /profile` renders `Profile.svelte` with current user data; `PUT /profile` updates and flashes success message.
-  - [ ] **Test (Feature):** `tests/Feature/Auth/ProfileTest.php` — assert `GET /profile` as member returns Inertia page with user props; assert `PUT /profile` with valid data updates DB record; assert guest is redirected; assert email uniqueness validated on update.
+  - [x] **Test (Feature):** `tests/Feature/Auth/ProfileTest.php` — assert `GET /profile` as member returns Inertia page with user props; assert `PUT /profile` with valid data updates DB record; assert guest is redirected; assert email uniqueness validated on update.
 
-- [ ] **Change password** — separate form within profile; requires current password
+- [x] **Change password** — separate form within profile; requires current password
   - DoD: Wrong current password returns validation error; correct input updates hashed password; all other sessions invalidated.
-  - [ ] **Test (Feature):** `tests/Feature/Auth/ChangePasswordTest.php` — assert wrong current password returns validation error; assert correct current password hashes and stores new password; assert login with old password fails after change.
+  - [x] **Test (Feature):** `tests/Feature/Auth/ChangePasswordTest.php` — assert wrong current password returns validation error; assert correct current password hashes and stores new password; assert login with old password fails after change.
 
-- [ ] **Google OAuth** — "Sign in with Google" button on login and register pages; `google_id` stored on user
+- [x] **Google OAuth** — "Sign in with Google" button on login and register pages; `google_id` stored on user
   - DoD: Completing OAuth flow creates or links a user account and logs them in; existing email accounts are linked, not duplicated.
-  - [ ] **Test (Feature):** `tests/Feature/Auth/GoogleOAuthTest.php` — mock Socialite; assert callback with new email creates user with `google_id`; assert callback with existing email links `google_id` without creating duplicate; assert user is authenticated after callback.
+  - [x] **Test (Feature):** `tests/Feature/Auth/GoogleOAuthTest.php` — mock Socialite; assert callback with new email creates user with `google_id`; assert callback with existing email links `google_id` without creating duplicate; assert user is authenticated after callback.
 
 ---
 
@@ -61,30 +61,30 @@ Legend: ✅ = Done, 🔲 = Pending
 
 *Depends on: Phase 1 foundation, Phase 4 Book Detail data layer*
 
-- [ ] **Book index — data layer** — `BookController@index` queries books with eager-loaded `author`, `genres`, primary `book_image`; supports search, filter, sort, and pagination (15 per page)
+- [x] **Book index — data layer** — `BookController@index` queries books with eager-loaded `author`, `genres`, primary `book_image`; supports search, filter, sort, and pagination (15 per page)
   - DoD: `GET /books?search=&genre=&year=&language=&availability=&sort=` returns paginated JSON via Inertia; all filter params are combinable.
-  - [ ] **Test (Feature):** `tests/Feature/Book/BookIndexTest.php` — assert `GET /books` returns paginated list (15 per page); assert `?search=title` filters by title; assert `?genre=1` filters by genre; assert `?availability=1` filters available-only; assert eager-loaded relations present in response; assert `?sort=rating` orders correctly.
+  - [x] **Test (Feature):** `tests/Feature/Book/BookIndexTest.php` — assert `GET /books` returns paginated list (15 per page); assert `?search=title` filters by title; assert `?genre=1` filters by genre; assert `?availability=1` filters available-only; assert eager-loaded relations present in response; assert `?sort=rating` orders correctly.
 
-- [ ] **Explore page — UI** — paginated book grid with cover image, title, author, availability badge, average rating
+- [x] **Explore page — UI** — paginated book grid with cover image, title, author, availability badge, average rating
   - DoD: Page loads books; search input triggers debounced filter; filter sidebar updates URL params; no full-page reload on filter change (Inertia visit).
 
-- [ ] **Availability badge** — "Available" / "Borrowed" / "On Waitlist" derived from `book.availability` and presence of `waitlist` records
+- [x] **Availability badge** — "Available" / "Borrowed" / "On Waitlist" derived from `book.availability` and presence of `waitlist` records
   - DoD: Badge reflects live state; changes after a borrow/return without manual refresh (Inertia reload).
-  - [ ] **Test (Unit):** `tests/Unit/Models/BookAvailabilityTest.php` — assert `availability = true` with no waitlist yields "Available"; assert `availability = false` with no waitlist yields "Borrowed"; assert `availability = false` with active waitlist yields "On Waitlist".
+  - [x] **Test (Unit):** `tests/Unit/Models/BookAvailabilityTest.php` — assert `availability = true` with no waitlist yields "Available"; assert `availability = false` with no waitlist yields "Borrowed"; assert `availability = false` with active waitlist yields "On Waitlist".
 
-- [ ] **Home page recommendations section** — shows personalised books for logged-in members, popular books for guests (reuses book card component)
+- [x] **Home page recommendations section** — shows personalised books for logged-in members, popular books for guests (reuses book card component)
   - DoD: Logged-in member sees books by favourite authors or from previously borrowed genres first; guest sees top-rated books.
-  - [ ] **Test (Feature):** `tests/Feature/HomeTest.php` — assert `GET /` as guest contains top-rated books in props; assert as member with favourite authors, those authors' books appear in recommendations prop.
+  - [x] **Test (Feature):** `tests/Feature/HomeTest.php` — assert `GET /` as guest contains top-rated books in props; assert as member with favourite authors, those authors' books appear in recommendations prop.
 
 ---
 
 ## Phase 4 — Book Detail
 
-- [ ] **Book detail — data layer** — `BookController@show` returns book with `author`, `genres`, `images`, `reviews.user`, average rating, current user's borrowing status and waitlist position
+- [x] **Book detail — data layer** — `BookController@show` returns book with `author`, `genres`, `images`, `reviews.user`, average rating, current user's borrowing status and waitlist position
   - DoD: `GET /books/{id}` returns all required props; missing book returns 404.
-  - [ ] **Test (Feature):** `tests/Feature/Book/BookShowTest.php` — assert `GET /books/{id}` returns Inertia page with `author`, `genres`, `images`, `reviews`, `averageRating`, `userBorrowing`, `userWaitlistPosition` props; assert `GET /books/9999` returns 404; assert soft-deleted book returns 404.
+  - [x] **Test (Feature):** `tests/Feature/Book/BookShowTest.php` — assert `GET /books/{id}` returns Inertia page with `author`, `genres`, `images`, `reviews`, `averageRating`, `userBorrowing`, `userWaitlistPosition` props; assert `GET /books/9999` returns 404; assert soft-deleted book returns 404.
 
-- [ ] **Book detail — UI** — image gallery, metadata table, author card, genre tags, availability badge with action button (Borrow / Join Waitlist / Renew), reviews section
+- [x] **Book detail — UI** — image gallery, metadata table, author card, genre tags, availability badge with action button (Borrow / Join Waitlist / Renew), reviews section
   - DoD: All data from the data layer renders correctly; image gallery supports multiple images; action button reflects user's current state (no button for guests).
 
 ---

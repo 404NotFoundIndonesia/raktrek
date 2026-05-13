@@ -15,8 +15,10 @@ class Book extends Model
 
     protected $fillable = [
         'title', 'page_number', 'synopsis', 'publication_year',
-        'publisher', 'language', 'author_id', 'availibility',
+        'publisher', 'language', 'author_id', 'availability',
     ];
+
+    protected $appends = ['availability_label'];
 
     public function author() : BelongsTo {
         return $this->belongsTo(Author::class);
@@ -45,6 +47,33 @@ class Book extends Model
     public function histories(): HasMany
     {
         return $this->hasMany(Borrowing::class);
+    }
+
+    public function averageRating(): float
+    {
+        return round($this->reviews()->avg('rate') ?? 0, 1);
+    }
+
+    public function getAvailabilityLabelAttribute(): string
+    {
+        return $this->availabilityLabel();
+    }
+
+    public function availabilityLabel(): string
+    {
+        if ($this->availability !== 0) {
+            return match ($this->availability) {
+                2 => 'Lost',
+                3 => 'Broken',
+                default => 'Available',
+            };
+        }
+
+        $hasWaitlist = $this->relationLoaded('reservations')
+            ? $this->reservations->isNotEmpty()
+            : $this->reservations()->exists();
+
+        return $hasWaitlist ? 'On Waitlist' : 'Borrowed';
     }
 
 }

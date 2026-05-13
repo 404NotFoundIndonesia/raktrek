@@ -10,6 +10,8 @@
     const form = useForm({
         name: '',
         email: '',
+        phone: '',
+        address: '',
         password: '',
         password_confirmation: '',
     });
@@ -36,6 +38,18 @@
             <Input bind:value={$form.email} placeholder='Email'>
                 {#if $form.errors.email}
                 <div class="form-error">{$form.errors.email}</div>
+                {/if}
+            </Input>
+
+            <Input bind:value={$form.phone} placeholder='Phone (optional)'>
+                {#if $form.errors.phone}
+                <div class="form-error">{$form.errors.phone}</div>
+                {/if}
+            </Input>
+
+            <Input bind:value={$form.address} placeholder='Address (optional)'>
+                {#if $form.errors.address}
+                <div class="form-error">{$form.errors.address}</div>
                 {/if}
             </Input>
 

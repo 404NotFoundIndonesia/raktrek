@@ -52,7 +52,7 @@
     </div>
     {#if $page.props.user != null}
     <div>
-        <a href="/login" use:inertia class="footer-menu-link">
+        <a href="/profile" use:inertia class="footer-menu-link" class:active={ currentRoute === 'profile' }>
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-circle" width="30" height="30" viewBox="0 0 24 24" stroke-width="1" stroke="#000" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                 <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
@@ -93,7 +93,7 @@
     <a href="/" use:inertia class:active={ currentRoute === 'home' }>Home</a>
     <a href="/explore" use:inertia class:active={ currentRoute === 'explore' }>Explore</a>
     {#if $page.props.user != null}
-    <a href="/" use:inertia class:active={ currentRoute === 'profile' }>Profile</a>
+    <a href="/profile" use:inertia class:active={ currentRoute === 'profile' }>Profile</a>
     <span aria-hidden="true" on:click={logout} class:active={ currentRoute === 'auth.login' }>Logout</span>
     {:else}
     <a href="/login" use:inertia class:active={ currentRoute === 'auth.login' || currentRoute === 'auth.register' }>Login</a>

@@ -10,6 +10,8 @@ class BookImage extends Model
 {
     use HasFactory;
 
+    protected $table = 'book_image';
+
     protected $fillable = ['book_id', 'path', 'description'];
 
     public function book(): BelongsTo

@@ -32,7 +32,7 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    public function register(): Response {
+    public function register(): Response|RedirectResponse {
         if (!auth()->guest()) {
             return redirect('/');
         }
