@@ -7,6 +7,7 @@
     export let genres;
 
     const form = useForm({
+        _method: 'PUT',
         title: book.title, author_id: book.author_id ?? '',
         synopsis: book.synopsis ?? '', publisher: book.publisher ?? '',
         publication_year: book.publication_year ?? '', language: book.language ?? '',
@@ -15,7 +16,7 @@
         images: [], image_descriptions: [],
     });
 
-    const submit = () => $form.put(`/admin/books/${book.id}`, { forceFormData: true });
+    const submit = () => $form.post(`/admin/books/${book.id}`, { forceFormData: true });
 
     const toggleGenre = (id) => {
         if ($form.genres.includes(id)) {

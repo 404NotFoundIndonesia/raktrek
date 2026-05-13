@@ -4,9 +4,9 @@
 
     export let author;
 
-    const form = useForm({ name: author.name, about: author.about ?? '', photo: null });
+    const form = useForm({ _method: 'PUT', name: author.name, about: author.about ?? '', photo: null });
     const handlePhoto = (e) => { $form.photo = e.target.files[0] ?? null; };
-    const submit = () => $form.put(`/admin/authors/${author.id}`, { forceFormData: true });
+    const submit = () => $form.post(`/admin/authors/${author.id}`, { forceFormData: true });
 </script>
 
 <AdminLayout>
