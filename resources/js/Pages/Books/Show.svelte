@@ -1,5 +1,5 @@
 <script>
-    import { useForm, usePage } from '@inertiajs/svelte';
+    import { useForm, page } from '@inertiajs/svelte';
     import Layout from '../../Components/Layout.svelte';
 
     export let book;
@@ -27,7 +27,7 @@
 
     $: ratingStars = stars(averageRating);
 
-    $: user = usePage().props.user;
+    $: user = $page.props.user;
 
     const borrowForm = useForm({ book_id: book.id });
     const borrowBook = () => $borrowForm.post('/borrowings');
@@ -56,7 +56,7 @@
 
     let editingReview = false;
 
-    $: flash = usePage().props.flash || {};
+    $: flash = $page.props.flash || {};
 </script>
 
 <Layout>

@@ -1,11 +1,11 @@
 <script>
     import BookCard from '../Components/BookCard.svelte';
     import Layout from '../Components/Layout.svelte';
-    import { usePage } from '@inertiajs/svelte';
+    import { page } from '@inertiajs/svelte';
 
     export let recommendations;
 
-    $: user = usePage().props.user;
+    $: user = $page.props.user;
 </script>
 
 <Layout>

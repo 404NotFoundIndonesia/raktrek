@@ -1,10 +1,10 @@
 <script>
-    import { useForm, usePage } from '@inertiajs/svelte';
+    import { useForm, page } from '@inertiajs/svelte';
     import Layout from '../../Components/Layout.svelte';
 
     export let borrowings;
 
-    $: flash = usePage().props.flash || {};
+    $: flash = $page.props.flash || {};
 
     const renewForms = {};
     const returnForms = {};

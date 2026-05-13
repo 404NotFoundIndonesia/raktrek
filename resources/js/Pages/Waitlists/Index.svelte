@@ -1,10 +1,10 @@
 <script>
-    import { useForm, usePage } from '@inertiajs/svelte';
+    import { useForm, page } from '@inertiajs/svelte';
     import Layout from '../../Components/Layout.svelte';
 
     export let waitlists;
 
-    $: flash = usePage().props.flash || {};
+    $: flash = $page.props.flash || {};
 
     const cancelForms = {};
     const getCancelForm = (id) => {

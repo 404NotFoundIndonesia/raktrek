@@ -1,11 +1,11 @@
 <script>
-    import { useForm, usePage } from '@inertiajs/svelte';
+    import { useForm, page } from '@inertiajs/svelte';
     import Layout from '../../../Components/Layout.svelte';
 
     export let book;
     export let queue;
 
-    $: flash = usePage().props.flash || {};
+    $: flash = $page.props.flash || {};
 
     const removeForms = {};
     const getForm = (id) => {
