@@ -1,9 +1,7 @@
 <script>
     export let book;
 
-    $: coverImage = book.images && book.images.length > 0
-        ? '/storage/' + book.images[0].path
-        : null;
+    $: coverImage = book.image ? '/storage/' + book.image.path : (book.images && book.images.length > 0 ? '/storage/' + book.images[0].path : null);
 
     $: rating = book.reviews_avg_rate ? parseFloat(book.reviews_avg_rate).toFixed(1) : null;
 

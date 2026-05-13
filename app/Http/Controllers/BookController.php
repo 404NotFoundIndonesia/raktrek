@@ -13,7 +13,7 @@ class BookController extends Controller
     public function index(Request $request): Response
     {
         $query = Book::query()
-            ->with(['author', 'genres', 'images' => fn ($q) => $q->limit(1)])
+            ->with(['author', 'genres', 'image'])
             ->withAvg('reviews', 'rate');
 
         if ($search = $request->get('search')) {
