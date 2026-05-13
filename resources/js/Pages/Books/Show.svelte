@@ -8,6 +8,7 @@
     export let userBorrowing;
     export let userWaitlistPosition;
     export let userReview;
+    export let isFavouritedAuthor;
 
     let activeImage = book.images && book.images.length > 0 ? book.images[0] : null;
 
@@ -42,6 +43,16 @@
     const updateReview = () => userReview && $reviewForm.put(`/reviews/${userReview.id}`);
     const deleteReviewForm = useForm({});
     const deleteReview = () => userReview && $deleteReviewForm.delete(`/reviews/${userReview.id}`);
+
+    const favForm = useForm({});
+    const toggleFavourite = () => {
+        if (!book.author) return;
+        if (isFavouritedAuthor) {
+            $favForm.delete(`/authors/${book.author.id}/favourite`);
+        } else {
+            $favForm.post(`/authors/${book.author.id}/favourite`);
+        }
+    };
 
     let editingReview = false;
 
@@ -178,8 +189,20 @@
                     {#if book.author.photo}
                         <img class="author-photo" src="/storage/{book.author.photo}" alt={book.author.name} />
                     {/if}
-                    <div>
-                        <p class="author-card-name">{book.author.name}</p>
+                    <div class="author-info">
+                        <div class="author-name-row">
+                            <p class="author-card-name">{book.author.name}</p>
+                            {#if user}
+                                <button
+                                    class="fav-btn {isFavouritedAuthor ? 'fav-active' : ''}"
+                                    on:click={toggleFavourite}
+                                    disabled={$favForm.processing}
+                                    title={isFavouritedAuthor ? 'Remove from favourites' : 'Add to favourites'}
+                                >
+                                    {isFavouritedAuthor ? '♥' : '♡'}
+                                </button>
+                            {/if}
+                        </div>
                         {#if book.author.about}
                             <p class="author-about">{book.author.about}</p>
                         {/if}
@@ -424,8 +447,24 @@
 
     .author-card { display: flex; gap: 16px; align-items: flex-start; }
     .author-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
-    .author-card-name { font-weight: 600; margin: 0 0 4px; }
+    .author-info { flex: 1; }
+    .author-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .author-card-name { font-weight: 600; margin: 0; }
     .author-about { color: #555; font-size: 14px; margin: 0; }
+
+    .fav-btn {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: #ccc;
+        padding: 0;
+        line-height: 1;
+        transition: color 0.15s;
+    }
+    .fav-btn:hover:not(:disabled) { color: #e11d48; }
+    .fav-btn.fav-active { color: #e11d48; }
+    .fav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .reviews-list { display: flex; flex-direction: column; gap: 16px; }
 

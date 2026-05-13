@@ -83,6 +83,10 @@ class BookController extends Controller
             }
 
             $userReview = $book->reviews->firstWhere('user_id', $user->id);
+
+            $isFavouritedAuthor = $book->author_id
+                ? $user->favouriteAuthors()->where('authors.id', $book->author_id)->exists()
+                : false;
         }
 
         return Inertia::render('Books/Show', [
@@ -92,6 +96,7 @@ class BookController extends Controller
             'userBorrowing'        => $userBorrowing,
             'userWaitlistPosition' => $userWaitlistPosition,
             'userReview'           => $userReview,
+            'isFavouritedAuthor'   => $isFavouritedAuthor ?? false,
         ]);
     }
 }

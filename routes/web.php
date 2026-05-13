@@ -60,6 +60,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/books/{book}/reviews', [\App\Http\Controllers\ReviewController::class, 'store'])->name('reviews.store');
     Route::put('/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{review}', [\App\Http\Controllers\ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    Route::post('/authors/{author}/favourite', [\App\Http\Controllers\FavouriteAuthorController::class, 'store'])->name('authors.favourite');
+    Route::delete('/authors/{author}/favourite', [\App\Http\Controllers\FavouriteAuthorController::class, 'destroy'])->name('authors.unfavourite');
 });
 
 /*

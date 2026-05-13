@@ -162,17 +162,17 @@ Legend: ✅ = Done, 🔲 = Pending
 
 *Depends on: Phase 3, Phase 7 complete*
 
-- [ ] **Toggle favourite author** — `POST /authors/{id}/favourite` / `DELETE /authors/{id}/favourite` manages `favourite_authors` pivot
+- [x] **Toggle favourite author** — `POST /authors/{id}/favourite` / `DELETE /authors/{id}/favourite` manages `favourite_authors` pivot
   - DoD: Heart/toggle button on author card and book detail; state persists across page loads.
-  - [ ] **Test (Feature):** `tests/Feature/Author/FavouriteAuthorTest.php` — assert `POST /authors/{id}/favourite` inserts pivot record; assert duplicate insert is idempotent (no duplicate row); assert `DELETE /authors/{id}/favourite` removes pivot record; assert guest redirects to login.
+  - [x] **Test (Feature):** `tests/Feature/Author/FavouriteAuthorTest.php` — assert `POST /authors/{id}/favourite` inserts pivot record; assert duplicate insert is idempotent (no duplicate row); assert `DELETE /authors/{id}/favourite` removes pivot record; assert guest redirects to login.
 
-- [ ] **Recommendation engine** — `RecommendationService` scores books by: (1) books by favourite authors, (2) books in genres of past borrowings/reviews, (3) highest average rating; excludes already-borrowed books
+- [x] **Recommendation engine** — `RecommendationService` scores books by: (1) books by favourite authors, (2) books in genres of past borrowings/reviews, (3) highest average rating; excludes already-borrowed books
   - DoD: Returns ranked list of up to 10 books; falls back to top-rated books if no history.
-  - [ ] **Test (Unit):** `tests/Unit/Services/RecommendationServiceTest.php` — assert books by favourite authors ranked first; assert already-borrowed books excluded; assert books in preferred genres rank above unrelated books; assert new member with no history receives top-rated fallback list; assert result count ≤ 10.
+  - [x] **Test (Unit):** `tests/Unit/Services/RecommendationServiceTest.php` — assert books by favourite authors ranked first; assert already-borrowed books excluded; assert books in preferred genres rank above unrelated books; assert new member with no history receives top-rated fallback list; assert result count ≤ 10.
 
-- [ ] **Recommendations UI** — dedicated section on home page for logged-in members; separate "Recommended for You" section on Explore page
+- [x] **Recommendations UI** — dedicated section on home page for logged-in members; separate "Recommended for You" section on Explore page
   - DoD: Section hidden for guests; shows fallback for new members with no borrowing/review history.
-  - [ ] **Test (Feature):** `tests/Feature/RecommendationTest.php` — assert `GET /` as member contains `recommendations` prop with books; assert `GET /` as guest does not contain personalised recommendations prop (or contains popular fallback).
+  - [x] **Test (Feature):** `tests/Feature/RecommendationTest.php` — assert `GET /` as member contains `recommendations` prop with books; assert `GET /` as guest does not contain personalised recommendations prop (or contains popular fallback).
 
 ---
 
