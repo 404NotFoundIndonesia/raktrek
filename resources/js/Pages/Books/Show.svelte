@@ -33,6 +33,9 @@
     const renewForm = useForm({});
     const renewBorrowing = () => userBorrowing && $renewForm.patch(`/borrowings/${userBorrowing.id}/renew`);
 
+    const waitlistForm = useForm({ book_id: book.id });
+    const joinWaitlist = () => $waitlistForm.post('/waitlists');
+
     $: flash = usePage().props.flash || {};
 </script>
 
@@ -121,7 +124,12 @@
                                 {$borrowForm.processing ? 'Borrowing…' : 'Borrow Book'}
                             </button>
                         {:else if availabilityLabel === 'Borrowed' || availabilityLabel === 'On Waitlist'}
-                            <a href="/books/{book.id}/waitlist" class="action-btn secondary">Join Waitlist</a>
+                            <button class="action-btn secondary" on:click={joinWaitlist} disabled={$waitlistForm.processing}>
+                                {$waitlistForm.processing ? 'Joining…' : 'Join Waitlist'}
+                            </button>
+                            {#if $waitlistForm.errors.book_id}
+                                <p class="field-error">{$waitlistForm.errors.book_id}</p>
+                            {/if}
                         {/if}
                     {/if}
                 {/if}

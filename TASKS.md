@@ -119,21 +119,21 @@ Legend: ✅ = Done, 🔲 = Pending
 
 *Depends on: Phase 5 complete*
 
-- [ ] **Join waitlist** — `POST /waitlists` creates a `waitlist` record with `finish_date = today + 7 days`; blocked if book is available or user already on list
+- [x] **Join waitlist** — `POST /waitlists` creates a `waitlist` record with `finish_date = today + 7 days`; blocked if book is available or user already on list
   - DoD: Duplicate join returns validation error; waitlist position shown on book detail page.
-  - [ ] **Test (Feature):** `tests/Feature/Waitlist/JoinWaitlistTest.php` — assert `POST /waitlists` creates record with correct `finish_date`; assert joining for available book returns 422; assert duplicate join returns 422; assert guest redirects to login.
+  - [x] **Test (Feature):** `tests/Feature/Waitlist/JoinWaitlistTest.php` — assert `POST /waitlists` creates record with correct `finish_date`; assert joining for available book returns 422; assert duplicate join returns 422; assert guest redirects to login.
 
-- [ ] **Cancel waitlist** — `DELETE /waitlists/{id}` removes user's reservation
+- [x] **Cancel waitlist** — `DELETE /waitlists/{id}` removes user's reservation
   - DoD: Only the owning member or staff can cancel; next member in queue is unaffected.
-  - [ ] **Test (Feature):** `tests/Feature/Waitlist/CancelWaitlistTest.php` — assert owner can delete own waitlist entry; assert non-owner member returns 403; assert staff can delete any entry; assert other queue positions are unaffected after deletion.
+  - [x] **Test (Feature):** `tests/Feature/Waitlist/CancelWaitlistTest.php` — assert owner can delete own waitlist entry; assert non-owner member returns 403; assert staff can delete any entry; assert other queue positions are unaffected after deletion.
 
-- [ ] **Member waitlist view** — `GET /my/waitlists` lists all active reservations with book title and position in queue
+- [x] **Member waitlist view** — `GET /my/waitlists` lists all active reservations with book title and position in queue
   - DoD: Queue position calculated by `created_at` order; expired entries (`finish_date` < today) shown as expired.
-  - [ ] **Test (Feature):** `tests/Feature/Waitlist/MemberWaitlistTest.php` — assert `GET /my/waitlists` returns only current member's entries; assert queue position is correct relative to other entries for same book; assert expired entries have `is_expired = true`.
+  - [x] **Test (Feature):** `tests/Feature/Waitlist/MemberWaitlistTest.php` — assert `GET /my/waitlists` returns only current member's entries; assert queue position is correct relative to other entries for same book; assert expired entries have `is_expired = true`.
 
-- [ ] **Staff: waitlist management** — staff views full queue per book; can remove any entry
+- [x] **Staff: waitlist management** — staff views full queue per book; can remove any entry
   - DoD: `GET /admin/books/{id}/waitlists` returns ordered queue; staff delete cascades correctly.
-  - [ ] **Test (Feature):** `tests/Feature/Admin/AdminWaitlistTest.php` — assert staff sees all waitlist entries for a book ordered by `created_at`; assert `DELETE /admin/waitlists/{id}` removes entry; assert member on this route returns 403.
+  - [x] **Test (Feature):** `tests/Feature/Admin/AdminWaitlistTest.php` — assert staff sees all waitlist entries for a book ordered by `created_at`; assert `DELETE /admin/waitlists/{id}` removes entry; assert member on this route returns 403.
 
 ---
 

@@ -52,6 +52,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/borrowings/{borrowing}/return', [\App\Http\Controllers\BorrowingController::class, 'processReturn'])->name('borrowings.return');
     Route::patch('/borrowings/{borrowing}/renew', [\App\Http\Controllers\BorrowingController::class, 'renew'])->name('borrowings.renew');
     Route::get('/my/borrowings', [\App\Http\Controllers\BorrowingController::class, 'myBorrowings'])->name('my.borrowings');
+
+    Route::post('/waitlists', [\App\Http\Controllers\WaitlistController::class, 'store'])->name('waitlists.store');
+    Route::delete('/waitlists/{waitingList}', [\App\Http\Controllers\WaitlistController::class, 'destroy'])->name('waitlists.destroy');
+    Route::get('/my/waitlists', [\App\Http\Controllers\WaitlistController::class, 'myWaitlists'])->name('my.waitlists');
 });
 
 /*
@@ -62,6 +66,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'role:staff'])->prefix('admin')->name('admin.')->group(function () {
     Route::patch('/borrowings/{borrowing}/return', [\App\Http\Controllers\Admin\AdminBorrowingController::class, 'processReturn'])->name('borrowings.return');
+    Route::get('/books/{book}/waitlists', [\App\Http\Controllers\Admin\AdminWaitlistController::class, 'index'])->name('books.waitlists');
+    Route::delete('/waitlists/{waitingList}', [\App\Http\Controllers\Admin\AdminWaitlistController::class, 'destroy'])->name('waitlists.destroy');
 });
 
 /*
