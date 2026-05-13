@@ -218,37 +218,37 @@ Legend: ✅ = Done, 🔲 = Pending
 
 *Depends on: Phase 1 role middleware complete*
 
-- [ ] **Admin layout & route group** — `/admin` prefix with `staff` middleware; `Admin/Layout.svelte` with sidebar navigation
+- [x] **Admin layout & route group** — `/admin` prefix with `staff` middleware; `Admin/Layout.svelte` with sidebar navigation
   - DoD: `/admin` returns 403 for members and guests; staff see dashboard shell.
-  - [ ] **Test (Feature):** `tests/Feature/Admin/AdminAccessTest.php` — assert `GET /admin` as guest redirects to login; assert as member returns 403; assert as staff returns 200.
+  - [x] **Test (Feature):** `tests/Feature/Admin/AdminAccessTest.php` — assert `GET /admin` as guest redirects to login; assert as member returns 403; assert as staff returns 200.
 
-- [ ] **Book management — CRUD** — list, create, edit, soft-delete books; cover image upload to `book_image`
+- [x] **Book management — CRUD** — list, create, edit, soft-delete books; cover image upload to `book_image`
   - DoD: Create requires title, author, at least one genre; edit pre-fills form; soft-delete preserves borrowing history; images uploadable with description.
-  - [ ] **Test (Feature):** `tests/Feature/Admin/AdminBookTest.php` — assert `POST /admin/books` creates book with images and genres; assert missing title returns 422; assert `DELETE /admin/books/{id}` soft-deletes (sets `deleted_at`); assert borrowing history preserved after soft-delete; assert member on any route returns 403.
+  - [x] **Test (Feature):** `tests/Feature/Admin/AdminBookTest.php` — assert `POST /admin/books` creates book with images and genres; assert missing title returns 422; assert `DELETE /admin/books/{id}` soft-deletes (sets `deleted_at`); assert borrowing history preserved after soft-delete; assert member on any route returns 403.
 
-- [ ] **Author management — CRUD** — list, create, edit, delete authors; photo upload
+- [x] **Author management — CRUD** — list, create, edit, delete authors; photo upload
   - DoD: Author with referenced books returns 422 on delete; photo stored in `storage/app/public`.
-  - [ ] **Test (Feature):** `tests/Feature/Admin/AdminAuthorTest.php` — assert create stores author with photo path; assert delete with referenced books returns 422; assert delete with no books succeeds.
+  - [x] **Test (Feature):** `tests/Feature/Admin/AdminAuthorTest.php` — assert create stores author with photo path; assert delete with referenced books returns 422; assert delete with no books succeeds.
 
-- [ ] **Genre management — CRUD** — list, create, edit, delete genres; name unique
+- [x] **Genre management — CRUD** — list, create, edit, delete genres; name unique
   - DoD: Genre with referenced books returns 422 on delete; name is unique.
-  - [ ] **Test (Feature):** `tests/Feature/Admin/AdminGenreTest.php` — assert create enforces unique name (duplicate returns 422); assert delete with referenced books returns 422; assert delete with no books succeeds.
+  - [x] **Test (Feature):** `tests/Feature/Admin/AdminGenreTest.php` — assert create enforces unique name (duplicate returns 422); assert delete with referenced books returns 422; assert delete with no books succeeds.
 
-- [ ] **User management** — list members; activate/deactivate (soft-delete); promote to staff
+- [x] **User management** — list members; activate/deactivate (soft-delete); promote to staff
   - DoD: Deactivated users cannot log in; staff cannot deactivate themselves; role change takes effect immediately.
-  - [ ] **Test (Feature):** `tests/Feature/Admin/AdminUserTest.php` — assert deactivated user (`deleted_at` set) cannot log in; assert staff attempting to deactivate themselves returns 422; assert `PATCH /admin/users/{id}/role` changes role; assert deactivated user's session is invalidated.
+  - [x] **Test (Feature):** `tests/Feature/Admin/AdminUserTest.php` — assert deactivated user (`deleted_at` set) cannot log in; assert staff attempting to deactivate themselves returns 422; assert `PATCH /admin/users/{id}/role` changes role; assert deactivated user's session is invalidated.
 
-- [ ] **Borrowing records** — paginated list of all loans with overdue highlight; staff processes return inline
+- [x] **Borrowing records** — paginated list of all loans with overdue highlight; staff processes return inline
   - DoD: Filter by overdue / active / returned; return triggers same logic as Phase 5.
-  - [ ] **Test (Feature):** Add filter assertions to `tests/Feature/Admin/AdminReturnTest.php` — assert `GET /admin/borrowings?filter=overdue` returns only overdue records; assert `?filter=active` returns only active loans.
+  - [x] **Test (Feature):** Add filter assertions to `tests/Feature/Admin/AdminReturnTest.php` — assert `GET /admin/borrowings?filter=overdue` returns only overdue records; assert `?filter=active` returns only active loans.
 
-- [ ] **Waitlist management** — per-book waitlist view ordered by `created_at`; staff can remove any entry
+- [x] **Waitlist management** — per-book waitlist view ordered by `created_at`; staff can remove any entry
   - DoD: Removal triggers notification to next member in queue.
-  - [ ] **Test (Feature):** Already covered in `tests/Feature/Admin/AdminWaitlistTest.php` — add assertion that removing first-in-queue triggers `BookAvailableNotification` to next member.
+  - [x] **Test (Feature):** Already covered in `tests/Feature/Admin/AdminWaitlistTest.php` — add assertion that removing first-in-queue triggers `BookAvailableNotification` to next member.
 
-- [ ] **Reports** — three pages: most borrowed (30 days), overdue summary, active members (30 days)
+- [x] **Reports** — three pages: most borrowed (30 days), overdue summary, active members (30 days)
   - DoD: Data loaded server-side; renders in table; no external BI tool.
-  - [ ] **Test (Feature):** `tests/Feature/Admin/AdminReportTest.php` — assert most-borrowed report returns books ordered by borrow count descending; assert overdue summary count matches actual overdue borrowings; assert active members count matches members with at least one borrowing in last 30 days.
+  - [x] **Test (Feature):** `tests/Feature/Admin/AdminReportTest.php` — assert most-borrowed report returns books ordered by borrow count descending; assert overdue summary count matches actual overdue borrowings; assert active members count matches members with at least one borrowing in last 30 days.
 
 ---
 

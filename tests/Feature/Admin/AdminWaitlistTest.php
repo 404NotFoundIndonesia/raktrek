@@ -5,7 +5,9 @@ namespace Tests\Feature\Admin;
 use App\Models\Book;
 use App\Models\User;
 use App\Models\WaitingList;
+use App\Notifications\BookAvailableNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class AdminWaitlistTest extends TestCase
@@ -87,5 +89,56 @@ class AdminWaitlistTest extends TestCase
         $book = Book::factory()->create();
 
         $this->get("/admin/books/{$book->id}/waitlists")->assertRedirect(route('auth.login'));
+    }
+
+    public function test_removing_first_in_queue_notifies_next_person(): void
+    {
+        Notification::fake();
+
+        $staff  = User::factory()->staff()->create();
+        $book   = Book::factory()->create(['availability' => 0]);
+        $first  = User::factory()->create();
+        $second = User::factory()->create();
+
+        $entry1 = WaitingList::factory()->create([
+            'book_id' => $book->id,
+            'user_id' => $first->id,
+            'created_at' => now()->subMinutes(10),
+        ]);
+        WaitingList::factory()->create([
+            'book_id' => $book->id,
+            'user_id' => $second->id,
+            'created_at' => now(),
+        ]);
+
+        $this->actingAs($staff)->delete("/admin/waitlists/{$entry1->id}");
+
+        Notification::assertSentTo($second, BookAvailableNotification::class);
+        Notification::assertNotSentTo($first, BookAvailableNotification::class);
+    }
+
+    public function test_removing_non_first_in_queue_does_not_notify(): void
+    {
+        Notification::fake();
+
+        $staff  = User::factory()->staff()->create();
+        $book   = Book::factory()->create(['availability' => 0]);
+        $first  = User::factory()->create();
+        $second = User::factory()->create();
+
+        WaitingList::factory()->create([
+            'book_id' => $book->id,
+            'user_id' => $first->id,
+            'created_at' => now()->subMinutes(10),
+        ]);
+        $entry2 = WaitingList::factory()->create([
+            'book_id' => $book->id,
+            'user_id' => $second->id,
+            'created_at' => now(),
+        ]);
+
+        $this->actingAs($staff)->delete("/admin/waitlists/{$entry2->id}");
+
+        Notification::assertNothingSent();
     }
 }
