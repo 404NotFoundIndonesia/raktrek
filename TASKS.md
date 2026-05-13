@@ -14,17 +14,17 @@ Legend: ✅ = Done, 🔲 = Pending
 
 - [x] **Eloquent models** — `User`, `Book`, `Author`, `Genre`, `Borrowing`, `WaitingList`, `Review`, `BookImage` with correct relationships
   - DoD: Relationships (`belongsTo`, `hasMany`, `belongsToMany`) return correct results via Tinker.
-  - [ ] **Test (Unit):** `tests/Unit/Models/` — assert each relationship method returns the correct related class; assert `Book` and `User` use `SoftDeletes`; assert `Book::genres()` uses `book_genre` pivot table.
+  - [x] **Test (Unit):** `tests/Unit/Models/` — assert each relationship method returns the correct related class; assert `Book` and `User` use `SoftDeletes`; assert `Book::genres()` uses `book_genre` pivot table.
 
 - [x] **Inertia + Svelte wiring** — Laravel sends pages via `Inertia::render()`, Svelte receives props
   - DoD: A page renders without JS errors; shared props (`user`, `currentRouteName`, `appName`) accessible in all Svelte pages.
-  - [ ] **Test (Feature):** `tests/Feature/InertiaSharedPropsTest.php` — assert `GET /` response contains `appName`, `currentRouteName`, and `user` keys in Inertia shared data.
+  - [x] **Test (Feature):** `tests/Feature/InertiaSharedPropsTest.php` — assert `GET /` response contains `appName`, `currentRouteName`, and `user` keys in Inertia shared data.
 
-- [ ] **Role middleware** — `EnsureRole` middleware to gate routes by `role` field (`member`, `staff`)
+- [x] **Role middleware** — `EnsureRole` middleware to gate routes by `role` field (`member`, `staff`)
   - DoD: Accessing a `staff`-only route as a `member` returns 403; as `staff` passes through.
-  - [ ] **Test (Feature):** `tests/Feature/Middleware/EnsureRoleTest.php` — assert guest returns 302 to login; member on staff route returns 403; staff on staff route returns 200.
+  - [x] **Test (Feature):** `tests/Feature/Middleware/EnsureRoleTest.php` — assert guest returns 302 to login; member on staff route returns 403; staff on staff route returns 200.
 
-- [ ] **Staff seeder** — seed one default staff account for local development
+- [x] **Staff seeder** — seed one default staff account for local development
   - DoD: `php artisan db:seed` creates a staff user; login works with seeded credentials.
 
 ---
