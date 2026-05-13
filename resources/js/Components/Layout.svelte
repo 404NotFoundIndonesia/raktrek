@@ -76,6 +76,18 @@
             <span>Profile</span>
         </a>
     </div>
+    {#if $page.props.user.role === 'staff'}
+    <div>
+        <a href="/admin" use:inertia class="footer-menu-link" class:active={ currentRoute?.startsWith('admin.') }>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" stroke-width="1" stroke="#000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+            </svg>
+            <span>Admin</span>
+        </a>
+    </div>
+    {/if}
     <div>
         <button type="button" on:click={logout} class="footer-menu-link footer-logout-btn" aria-label="Logout">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-logout" width="30" height="30" viewBox="0 0 24 24" stroke-width="1" stroke="#000" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -108,6 +120,9 @@
     <a href="/explore" use:inertia class:active={ currentRoute === 'explore' }>Explore</a>
     {#if $page.props.user != null}
     <a href="/profile" use:inertia class:active={ currentRoute === 'profile' }>Profile</a>
+    {#if $page.props.user.role === 'staff'}
+    <a href="/admin" use:inertia class:active={ currentRoute?.startsWith('admin.') }>Admin</a>
+    {/if}
     <button type="button" on:click={logout} class="side-menu-btn" class:active={ currentRoute === 'auth.login' }>Logout</button>
     {:else}
     <a href="/login" use:inertia class:active={ currentRoute === 'auth.login' || currentRoute === 'auth.register' }>Login</a>
