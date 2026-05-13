@@ -2,10 +2,10 @@
 
 # RakTrek
 
-[RakTrek](https://docs.google.com/document/d/10nKOwprLC4zxDlKjxxdCAFy0Gp1eTldqhLGYa4h47vo/edit?usp=sharing) is a web-based platform designed to streamline and enhance the management and user experience of a library. It aims to provide users with a convenient way to explore the library's catalogue, borrow books, and manage their reading activities.
+RakTrek is a web-based platform designed to streamline and enhance the management and user experience of a library. It aims to provide users with a convenient way to explore the library's catalogue, borrow books, and manage their reading activities.
 
 ## Database Schema
-<img src="https://github.com/404NotFoundIndonesia/raktrek/blob/main/docs/database.png" alt="database schema">
+<img src="docs/database.png" alt="database schema">
 
 ## License
 
