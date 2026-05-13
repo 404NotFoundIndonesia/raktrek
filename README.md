@@ -4,6 +4,8 @@
 
 RakTrek is a web-based platform designed to streamline and enhance the management and user experience of a library. It aims to provide users with a convenient way to explore the library's catalogue, borrow books, and manage their reading activities.
 
+<img src="docs/screenshot.png" alt="database schema">
+
 ## Database Schema
 <img src="docs/database.png" alt="database schema">
 
